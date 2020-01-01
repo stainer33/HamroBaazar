@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
         List<Item>items=new ArrayList<>();
         items.add(new Item("pulsar",R.drawable.cat,1000,"Used"));
         items.add(new Item("Bajaj",R.drawable.cat,1000,"Used"));
+        items.add(new Item("Crossfire",R.drawable.dd,14000,"New"));
+        items.add(new Item("Shine",R.drawable.dog,14000,"New"));
 
         ItemAdapter itemAdapter=new ItemAdapter(this,items);
         itemsRecyclerView.setAdapter(itemAdapter);

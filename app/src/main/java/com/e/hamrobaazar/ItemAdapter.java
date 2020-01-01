@@ -36,7 +36,7 @@ public class ItemAdapter extends RecyclerView.Adapter <ItemAdapter.ViewHolder>{
         Item item=items.get(position);
         holder.itemName.setText(item.getName());
         holder.itemImg.setImageResource(item.getImgId());
-        holder.itemPrice.setText(item.getPrice()+"");
+        holder.itemPrice.setText("Rs "+item.getPrice()+"");
         holder.itemCondition.setText(item.getCondition());
     }
 
