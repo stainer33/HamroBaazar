@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">HamroBaazar</string>
+    <string name="start">Naviageation_drawer_start</string>
+    <string name="end">Naviageation_drawer_end</string>
 </resources>
