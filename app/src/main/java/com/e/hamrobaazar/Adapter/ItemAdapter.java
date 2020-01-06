@@ -1,4 +1,4 @@
-package com.e.hamrobaazar;
+package com.e.hamrobaazar.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.e.hamrobaazar.R;
+import com.e.hamrobaazar.models.Item;
 
 import java.util.List;
 

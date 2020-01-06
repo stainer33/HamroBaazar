@@ -1,4 +1,4 @@
-package com.e.hamrobaazar;
+package com.e.hamrobaazar.models;
 
 public class Item {
     private String name;
