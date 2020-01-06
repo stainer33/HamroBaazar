@@ -6,12 +6,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".RegisterActivity">
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
         android:textSize="30sp" />
+<de.hdodenhof.circleimageview.CircleImageView
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:src="@drawable/dog"
+    android:id="@+id/imgProfile"/>
+
 
     <EditText
         android:id="@+id/etName"
