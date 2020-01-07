@@ -5,12 +5,14 @@ public class Item {
     private int imgId;
     private  int price;
     private  String condition;
+    private String type;
 
-    public Item(String name, int imgId, int price, String condition) {
+    public Item(String name, int imgId, int price, String condition,String type) {
         this.name = name;
         this.imgId = imgId;
         this.price = price;
         this.condition = condition;
+        this.type=type;
     }
 
     public String getName() {

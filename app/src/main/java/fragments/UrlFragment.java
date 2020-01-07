@@ -45,12 +45,13 @@ String url;
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+               /* FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragmentContainer, new FrontFragment());
                 transaction.addToBackStack(null);
 
 
-                transaction.commit();
+                transaction.commit();*/
+               getActivity().onBackPressed();
             }
         });
         return view;

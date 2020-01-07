@@ -1,5 +1,6 @@
 package com.e.hamrobaazar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -8,21 +9,35 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.e.hamrobaazar.API.ItemAPI;
 import com.e.hamrobaazar.Adapter.ImageSliderAdapter;
 import com.e.hamrobaazar.Adapter.ItemAdapter;
 import com.e.hamrobaazar.models.Item;
+import com.e.hamrobaazar.url.URL;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.http.Url;
+
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView itemsRecyclerView;
+    private RecyclerView itemsRecyclerView,itemsRecyclerViewTrend;
 
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
@@ -44,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout=findViewById(R.id.drawerLayout);
         toolbar=findViewById(R.id.toolbar);
         itemsRecyclerView=findViewById(R.id.itemsRecyclerView);
+        itemsRecyclerViewTrend=findViewById(R.id.itemsRecyclerViewTrend);
         viewPager=findViewById(R.id.viewPager);
 
         setSupportActionBar(toolbar);
@@ -59,15 +75,46 @@ public class MainActivity extends AppCompatActivity {
 
         //Recycler View
 
-        List<Item>items=new ArrayList<>();
-        items.add(new Item("pulsar",R.drawable.cat,1000,"Used"));
-        items.add(new Item("Bajaj",R.drawable.cat,1000,"Used"));
-        items.add(new Item("Crossfire",R.drawable.dd,14000,"New"));
-        items.add(new Item("Shine",R.drawable.dog,14000,"New"));
+        Retrofit retrofit=URL.retrofit;
+        ItemAPI itemAPI=URL.itemAPI;
+        Call<List<Item>>listCall=itemAPI.getAllRecentItems();
+        listCall.enqueue(new Callback<List<Item>>() {
+            @Override
+            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
+                List<Item>items=response.body();
 
-        ItemAdapter itemAdapter=new ItemAdapter(this,items);
-        itemsRecyclerView.setAdapter(itemAdapter);
-        itemsRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+                ItemAdapter itemAdapter=new ItemAdapter(MainActivity.this,items);
+                itemsRecyclerView.setAdapter(itemAdapter);
+                itemsRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this,LinearLayoutManager.HORIZONTAL,false));
+
+            }
+
+
+            @Override
+            public void onFailure(Call<List<Item>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "failed:"+t, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        Call<List<Item>>call=itemAPI.getAllTrendingItems();
+        call.enqueue(new Callback<List<Item>>() {
+            @Override
+            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
+                List<Item>items=response.body();
+
+                ItemAdapter itemAdapter=new ItemAdapter(MainActivity.this,items);
+                itemsRecyclerViewTrend.setAdapter(itemAdapter);
+                itemsRecyclerViewTrend.setLayoutManager(new LinearLayoutManager(MainActivity.this,LinearLayoutManager.HORIZONTAL,false));
+            }
+
+            @Override
+            public void onFailure(Call<List<Item>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "failed:"+t, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
 
     }
     //for slide show
@@ -94,5 +141,24 @@ public class MainActivity extends AppCompatActivity {
                 handler.post(runnable);
             }
         },25,25);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.user:
+
+                LoginDialog loginDialog=new LoginDialog();
+                loginDialog.show(getSupportFragmentManager(),"login dialog");
+
+                /*final Dialog fbDialogue = new Dialog(MainActivity.this, android.R.style.Theme_Black_NoTitleBar);
+                fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
+                fbDialogue.setContentView(R.layout.activity_login);
+                fbDialogue.setCancelable(true);
+                fbDialogue.show();*/
+                Toast.makeText(this, "select", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

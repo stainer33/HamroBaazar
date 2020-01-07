@@ -19,6 +19,7 @@ import com.e.hamrobaazar.API.UserAPI;
 import com.e.hamrobaazar.models.User;
 import com.e.hamrobaazar.url.URL;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,7 +28,7 @@ import retrofit2.Retrofit;
 public class RegisterActivity extends AppCompatActivity {
     EditText etFullName, etEmail, etPassword, etMobileNo, etAddress;
     Button btnSignUp;
-    ImageView imageView;
+    CircleImageView imgProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         etPassword=findViewById(R.id.etPassword);
         etMobileNo=findViewById(R.id.etMobileNo);
         btnSignUp=findViewById(R.id.btnSignUp);
+        imgProfile =findViewById(R.id.imgProfile);
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
         Uri uri = data.getData();
-        imageView.setImageURI(uri);
+        imgProfile.setImageURI(uri);
     }
     private String getRealPathFormUri(Uri uri){
         String[] projection = {MediaStore.Images.Media.DATA};

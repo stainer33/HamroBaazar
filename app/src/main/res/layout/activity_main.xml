@@ -17,6 +17,9 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/navigation_drawer" />
 
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -44,10 +47,15 @@
         android:orientation="horizontal"
         android:id="@+id/itemsRecyclerView"/>
 
-        <FrameLayout
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/itemsContainer"/>
+            android:orientation="horizontal"
+            android:id="@+id/itemsRecyclerViewTrend"
+            android:layout_marginTop="10dp"/>
+
+
+
     </LinearLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>
