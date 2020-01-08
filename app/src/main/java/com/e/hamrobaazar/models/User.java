@@ -5,6 +5,15 @@ public class User {
     private String fullName;
     private String password;
     private String mobileNo;
+    private String profileImg;
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
 
     public String getEmail() {
         return email;
@@ -46,12 +55,13 @@ public class User {
         this.address = address;
     }
 
-    public User(String email, String fullName, String password, String mobileNo, String address) {
+    public User(String email, String fullName, String password, String mobileNo, String address,String profileImg) {
         this.email = email;
         this.fullName = fullName;
         this.password = password;
         this.mobileNo = mobileNo;
         this.address = address;
+        this.profileImg=profileImg;
     }
 
     private String address;

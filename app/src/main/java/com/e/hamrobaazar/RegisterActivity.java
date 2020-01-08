@@ -2,9 +2,13 @@ package com.e.hamrobaazar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.loader.content.CursorLoader;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,14 +20,23 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.e.hamrobaazar.API.UserAPI;
+import com.e.hamrobaazar.Response.ImageResponse;
+import com.e.hamrobaazar.StrictMode.StrictModeClass;
 import com.e.hamrobaazar.models.User;
 import com.e.hamrobaazar.url.URL;
 
+import java.io.File;
+import java.io.IOException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.http.Url;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText etFullName, etEmail, etPassword, etMobileNo, etAddress;
@@ -54,29 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String fullName= etFullName.getText().toString();
-                String email=etEmail.getText().toString();
-                String address=etAddress.getText().toString();
-                String password=etPassword.getText().toString();
-                String mobileNo=etMobileNo.getText().toString();
-
-
-
-               Retrofit retrofit= URL.retrofit;
-                UserAPI userAPI=URL.userAPI;
-                Call<Void>voidCall=userAPI.signUp(email,fullName,password,mobileNo,address);
-
-                voidCall.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        Toast.makeText(RegisterActivity.this, "Register Successful", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(RegisterActivity.this, "Registered Failed"+ t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                saveImageOnly();
+                signUp();
             }
         });
     }
@@ -107,5 +99,63 @@ public class RegisterActivity extends AppCompatActivity {
         String result = cursor.getString(colIndex);
         cursor.close();
         return result;
+    }
+
+    private void saveImageOnly() {
+        File file = new File(imagePath);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("imageFile",
+                file.getName(), requestBody);
+
+        Retrofit retrofit= URL.retrofit;
+        UserAPI userAPI=URL.userAPI;
+       // Call<Void>voidCall=userAPI.signUp(email,fullName,password,mobileNo,address);
+        Call<ImageResponse> responseBodyCall = userAPI.uploadImage(body);
+
+        StrictModeClass.StrictMode();
+        //Synchronous method
+        try {
+            Response<ImageResponse> imageResponseResponse = responseBodyCall.execute();
+            imageName = imageResponseResponse.body().getFilename();
+            Toast.makeText(this, "Image inserted" + imageName, Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            Toast.makeText(this, "Error: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+    private void signUp()
+    {
+        String fullName= etFullName.getText().toString();
+        String email=etEmail.getText().toString();
+        String address=etAddress.getText().toString();
+        String password=etPassword.getText().toString();
+        String mobileNo=etMobileNo.getText().toString();
+
+
+
+        Retrofit retrofit= URL.retrofit;
+        UserAPI userAPI=URL.userAPI;
+        Call<Void>voidCall=userAPI.signUp(email,fullName,password,mobileNo,address,imageName);
+
+        voidCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(RegisterActivity.this, "Register Successful", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(RegisterActivity.this, "Registered Failed"+ t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void CheckPermission()
+    {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED ||ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED )
+        {
+            ActivityCompat.requestPermissions(this,new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},0);
+        }
     }
 }
