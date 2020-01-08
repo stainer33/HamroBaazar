@@ -29,6 +29,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText etFullName, etEmail, etPassword, etMobileNo, etAddress;
     Button btnSignUp;
     CircleImageView imgProfile;
+    String imagePath;
+    String imageName="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,13 @@ public class RegisterActivity extends AppCompatActivity {
         etMobileNo=findViewById(R.id.etMobileNo);
         btnSignUp=findViewById(R.id.btnSignUp);
         imgProfile =findViewById(R.id.imgProfile);
+
+        imgProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BrowseImage();
+            }
+        });
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
         Uri uri = data.getData();
         imgProfile.setImageURI(uri);
+        imagePath=getRealPathFormUri(uri);
     }
     private String getRealPathFormUri(Uri uri){
         String[] projection = {MediaStore.Images.Media.DATA};
