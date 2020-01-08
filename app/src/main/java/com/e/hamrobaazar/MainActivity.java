@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private Timer timer;
     private  int currentPosition=0;
     private  int [] imageFiles={R.drawable.mm,R.drawable.bike,R.drawable.car};
-    public static String status="";//to check logged in or not
+    public static String token="";//to check logged in or not
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -150,14 +150,14 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.user:
-                if(status.equals("201"))
+                if(token.equals(""))
                 {
-                    Intent intent = new Intent(MainActivity.this,ProfileActivity.class);
+                    Intent intent = new Intent(MainActivity.this,LoginActivity.class);
                     startActivity(intent);
                 }
                 else
                 {
-                    Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                    Intent intent = new Intent(MainActivity.this,ProfileActivity.class);
                     startActivity(intent);
                 }
 
