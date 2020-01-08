@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private Timer timer;
     private  int currentPosition=0;
     private  int [] imageFiles={R.drawable.mm,R.drawable.bike,R.drawable.car};
+    public static String status="";//to check logged in or not
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -148,16 +150,17 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.user:
+                if(status.equals("201"))
+                {
+                    Intent intent = new Intent(MainActivity.this,ProfileActivity.class);
+                    startActivity(intent);
+                }
+                else
+                {
+                    Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                }
 
-                LoginDialog loginDialog=new LoginDialog();
-                loginDialog.show(getSupportFragmentManager(),"login dialog");
-
-                /*final Dialog fbDialogue = new Dialog(MainActivity.this, android.R.style.Theme_Black_NoTitleBar);
-                fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-                fbDialogue.setContentView(R.layout.activity_login);
-                fbDialogue.setCancelable(true);
-                fbDialogue.show();*/
-                Toast.makeText(this, "select", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
